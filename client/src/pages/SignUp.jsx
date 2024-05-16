@@ -1,6 +1,6 @@
 import { Alert, Button, Label, Spinner, TextInput } from 'flowbite-react'
-import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 
 export default function SignUp() {
     // usare un hook per salvare i dati dell forma dentro object
@@ -9,6 +9,8 @@ export default function SignUp() {
     const [errorMessage, setErrorMessage] = useState(null);
     // loading serve per creare spinner effect sul submit button quando mandiamo una richiesta per dare feedback del lavoro effettuato
     const [loading, setLoading] = useState(false);
+    // init navigate per cambiare pagina quando submit è successfull line 46
+    const navigate = useNavigate();
     // funzione per trovare e.target.id e salvare i value nel posto giusto dentro formData
     const handleChange = (e) => {
         setFormData({
@@ -40,6 +42,10 @@ export default function SignUp() {
                 return setErrorMessage(data.message);
             }
             setLoading(false); 
+            // se non ci sono errori nella richiesta precedente, allora usiamo navigate hook per cambiare page
+            if(res.ok) {
+            navigate('/sign-in');
+            }
         } catch (error) {
             setErrorMessage(error.message);
             setLoading(false);
