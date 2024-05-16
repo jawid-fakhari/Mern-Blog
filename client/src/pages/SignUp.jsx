@@ -1,4 +1,4 @@
-import { Alert, Button, Label, TextInput } from 'flowbite-react'
+import { Alert, Button, Label, Spinner, TextInput } from 'flowbite-react'
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 
@@ -7,7 +7,7 @@ export default function SignUp() {
     const [formData, setFormData] = useState({});
     // error massage nel caso del errore di richiesta
     const [errorMessage, setErrorMessage] = useState(null);
-    // loading 
+    // loading serve per creare spinner effect sul submit button quando mandiamo una richiesta per dare feedback del lavoro effettuato
     const [loading, setLoading] = useState(false);
     // funzione per trovare e.target.id e salvare i value nel posto giusto dentro formData
     const handleChange = (e) => {
@@ -81,7 +81,16 @@ export default function SignUp() {
                             placeholder='your password'
                             id='password' onChange={handleChange} />
                     </div>
-                    <Button className='w-full mt-5' gradientDuoTone='purpleToPink' type='submit'>
+                    <Button className='w-full mt-5' gradientDuoTone='purpleToPink' type='submit' disabled={loading}>
+                        {
+                            loading ? (
+                                <>
+                                <Spinner size='sm'/>
+                                <span className='pl-3'>Loading...</span>
+                                </>
+                            ) : (
+                                'Sign Up'
+                            )}
                         Submit
                     </Button>
                 </form>
