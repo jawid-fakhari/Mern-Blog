@@ -2,16 +2,17 @@ import { Alert, Button, Label, Spinner, TextInput } from 'flowbite-react'
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 
+// definzione della funzione compnente signup
 export default function SignUp() {
-    // usare un hook per salvare i dati dell forma dentro object
+    // Utilizzo di useState per gestire lo stato dei campi del form
     const [formData, setFormData] = useState({});
-    // error massage nel caso del errore di richiesta
+    // Utilizzo di useState per gestire lo stato dell'errore
     const [errorMessage, setErrorMessage] = useState(null);
-    // loading serve per creare spinner effect sul submit button quando mandiamo una richiesta per dare feedback del lavoro effettuato
+    // Utilizzo di useState per gestire lo stato di loading
     const [loading, setLoading] = useState(false);
     // init navigate per cambiare pagina quando submit è successfull line 46
     const navigate = useNavigate();
-    // funzione per trovare e.target.id e salvare i value nel posto giusto dentro formData
+    // funzione per gestire il cambiamento dei valori nei campi del form
     const handleChange = (e) => {
         setFormData({
             ...formData,// spread operator ci  da possibilità di mantenere i dati dell form
@@ -61,7 +62,7 @@ export default function SignUp() {
                     </span>
                     Blog
                 </Link>
-                <p className='text-sm mt-5'>This is a demo project for my portfolio, you can SignUp with your email and password or with your google account</p>
+                <p className='text-sm mt-5'>You can SignUp with your email and password or with your google account</p>
             </div>
             {/* right */}
             <div className='flex-1'>
@@ -97,7 +98,6 @@ export default function SignUp() {
                             ) : (
                                 'Sign Up'
                             )}
-                        Submit
                     </Button>
                 </form>
                 <span>
