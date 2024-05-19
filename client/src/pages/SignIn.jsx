@@ -2,15 +2,21 @@
 import { Alert, Button, Label, Spinner, TextInput } from 'flowbite-react'
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux';
+import { signInStart, signInSuccess, signInFail } from '../redux/user/userSlice';
 
 // definzione della funzione compnente SingIn
 export default function SingIn() {
     // Utilizzo di useState per gestire lo stato dei campi del form
     const [formData, setFormData] = useState({});
     // Utilizzo di useState per gestire lo stato dell'errore
-    const [errorMessage, setErrorMessage] = useState(null);
+    // const [errorMessage, setErrorMessage] = useState(null);
     // Utilizzo di useState per gestire lo stato di loading
-    const [loading, setLoading] = useState(false);
+    // const [loading, setLoading] = useState(false);
+
+    const {loading, error: errorMessage} = useSelector(state => state.user)
+
+    const dispatch = useDispatch();
     
     // Ottenimento dell'oggetto navigate da useNavigate line 52
     const navigate = useNavigate();
@@ -28,11 +34,10 @@ export default function SingIn() {
         e.preventDefault(); 
         // Controllo se i campi username e password sono compilati
         if (!formData.username || !formData.password) {
-            return setErrorMessage("Please fillout all required fields");
+            return dispatch(signInFail("Please fill all fields"))
         }
         try {
-            setLoading(true);
-            setErrorMessage(null);
+            dispatch(signInStart())
             // Richiesta POST all'API per effettuare il login
             const res = await fetch('/api/auth/signin', {
                 method: 'POST',
@@ -45,17 +50,16 @@ export default function SingIn() {
 
             // Controllo se la richiesta è fallita
             if (data.success === false) {
-                return setErrorMessage(data.message);
+                dispatch(signInFail(data.message));
             }
-            setLoading(false);
             
             // Se la richiesta è riuscita, reindirizzamento alla home
             if (res.ok) {
+                dispatch(signInSuccess(data));
                 navigate('/');
             }
         } catch (error) {
-            setErrorMessage(error.message);
-            setLoading(false);
+            dispatch(signInFail(error.message));
         }
     };
 
