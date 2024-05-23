@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux';
 import { signInStart, signInSuccess, signInFail } from '../redux/user/userSlice';
+import OAuth from '../components/OAuth';
 
 // definzione della funzione compnente SingIn
 export default function SingIn() {
@@ -104,6 +105,7 @@ export default function SingIn() {
                                 'Sign in'
                             )}
                     </Button>
+                    <OAuth/>
                 </form>
                 <span>
                     Don't you have an account?

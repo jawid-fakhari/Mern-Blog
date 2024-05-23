@@ -1,6 +1,7 @@
 import { Alert, Button, Label, Spinner, TextInput } from 'flowbite-react'
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import OAuth from '../components/OAuth';
 
 // definzione della funzione compnente signup
 export default function SignUp() {
@@ -99,6 +100,7 @@ export default function SignUp() {
                                 'Sign Up'
                             )}
                     </Button>
+                    <OAuth/>
                 </form>
                 <span>
                     Do you have an account?
