@@ -81,20 +81,23 @@ export const signin = async (req, res, next) => {
     next(error);
   }
 };
- 
+
+ //Questa funzione gestisce il processo di accesso dell'utente tramite Google. Prende lo username, l'email e la password dal corpo della richiesta, convalida l'input, cripta la password utilizzando bcryptjs, crea un nuovo documento User nel database MongoDB, e restituisce un messaggio di successo al completamento della registrazione. Se si verifica un errore durante il processo, viene passato alla funzione middleware successiva.
 export const google = async (req, res, next) => {
-  const { email, name, googlePhotoUrl } = req.body;
+  const { name, email, googlePhotoUrl } = req.body;
   try {
-    const user = await User.find({ email});
-    if (user) {
-      const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
-      const { password,...rest } = user._doc;
-      res.status(200).cookie("access_token", token, {
-        httpOnly: true,
-      }).json(rest);
-    } else {
-      const gnereatedPassword = Math.random().toString(36).slice(-8);
-      const hashedPassword = bcryptjs.hashSync(gnereatedPassword, 10);
+  const user = await User.findOne({ email});
+  if (!user) {
+    const token = jwt.sign({id: user._id}, process.env.JWT_SECRET);
+    const { password, ...rest } = user._doc;
+    res.status(200).cookie("access_token", token, {
+      httpOnly: true,
+    }).json(rest);
+  } else {
+    const generatedPassword =
+      Math.random().toString(36).slice(-8) +
+      Math.random().toString(36).slice(-8);
+      const hashedPassword = bcryptjs.hashSync(generatedPassword, 10);
       const newUser = new User({
         username: name.toLowerCase().split(' ').join('')+Math.random().toString(9).slice(-4),
         email,
@@ -107,8 +110,9 @@ export const google = async (req, res, next) => {
       res.status(200).cookie("access_token", token, {
         httpOnly: true,
       }).json(rest);
-    }
-  } catch (error) {
+  }
+  } catch (err) {
     next(error);
   }
-  }
+
+}
